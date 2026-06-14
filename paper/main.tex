@@ -4,42 +4,157 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{booktabs}
-\title{World-Model Uncertainty Bloat: ICLR Main-Conference Gate Archive}
+\usepackage{graphicx}
+
+\graphicspath{{../figures/}}
+
+\title{World-Model Uncertainty Bloat:\\A Negative ICLR-Main Evidence Audit}
 \author{Anonymous Authors}
+
 \begin{document}
 \maketitle
+
 \begin{abstract}
-This document is not an ICLR main-conference submission. It is the v3 main-conference gate for a generated robotics draft about robot world-model reliability. The original research bet was: Expose cases where uncertainty mechanisms hide missing mechanics instead of repairing them. After a stricter hostile review, the honest terminal decision is \textbf{KILL/ARCHIVE}. Submission-hardening version: v3.
+Uncertainty-aware robot world models often use ensemble variance, dropout variance, conformal gates, or risk penalties to avoid overconfident actions. The hypothesis tested here is more skeptical: uncertainty can become bloated, hiding missing mechanics behind large predictive variance without diagnosing or repairing the physical cause. We rebuilt this generated paper around a deterministic local reliability benchmark with four manipulation tasks, five shift splits, eight methods, seven seeds, 47,040 main rollouts, 8,232 ablation rollouts, and 120,960 stress rollouts. The result is negative. On the combined missing-mechanics split, the proposed uncertainty-bloat audit reaches 0.537 task success, 0.146 hidden-mechanism F1, 0.410 bloat index, and 0.214 unsafe-action rate. Active probing reaches 0.636 success, while robust MPC reaches 0.608 success and only 0.057 unsafe-action rate. The paired success gap versus active probing is $-0.099 \pm 0.019$, and several ablations beat the full method on success. We therefore mark this paper \textbf{KILL/ARCHIVE}: the problem is real, but this mechanism is not a submission-ready solution.
 \end{abstract}
 
-\section{Gate Decision}
-The v2 paper was workshop-only. Under the active ICLR-main standard, that is insufficient. The local artifacts contain synthetic multi-seed diagnostics, but no real-robot validation, high-fidelity simulator benchmark, trained world-action model, implemented real baselines, or manual full-paper related-work synthesis. These missing items are not recoverable by editing text or rerunning the synthetic script.
+\section{Terminal Decision}
+\textbf{Decision: KILL/ARCHIVE for ICLR main.} The v4 repository contains a paper-specific world-model reliability benchmark, implemented uncertainty and control baselines, ablations, stress sweeps, figures, negative cases, and reproducibility files. The benchmark exposes a real failure mode: uncertainty gates can abstain without useful diagnosis. But the proposed bloat audit does not beat active probing or robust MPC on the key closed-loop criteria, and the evidence is local-only rather than hardware or accepted high-fidelity benchmark validation.
 
-\section{Fatal ICLR-Main Blockers}
+\section{Research Question}
+The intended claim was:
+\begin{quote}
+Expose cases where uncertainty mechanisms hide missing mechanics instead of repairing them.
+\end{quote}
+This is a valuable question. A robot world model can assign high uncertainty to an episode because of harmless aleatoric noise, perception dropout, contact-mode mismatch, friction/stiction shift, actuator saturation, or latency. Treating all of these as one scalar risk can cause either unsafe action or unnecessary abstention. The proposed mechanism attempts to audit bloated uncertainty by separating missing mechanics from noise, probing before repair, and penalizing false abstention.
+
+\section{Hostile Prior Work}
+The local hostile set includes uncertainty-calibrated safety gating, zero-shot uncertainty-aware sim-to-real deployment, Bayesian controller fusion, failure-aware VLA systems, diagnostic world-model benchmarks, and deployment-time reliability work. This makes generic uncertainty or conformal abstention insufficient as novelty. A credible contribution must show that the uncertainty representation changes diagnosis and repair, not just that a gate is conservative.
+
+\section{Benchmark}
+The v4 benchmark simulates four manipulation settings:
 \begin{itemize}
-\item Evidence is synthetic and generated from a shared batch template.
-\item Baselines are diagnostic probability models, not implemented competing robot systems.
-\item Ablations do not correspond to a trained model checkpoint.
-\item No hardware, high-fidelity benchmark, qualitative rollouts, or failure videos are available.
-\item Related work is based on pool slices and hostile metadata, not a manual full-paper synthesis.
-\item Claims would be misleading if framed as ICLR-main empirical robotics evidence.
+\item \textbf{peg insertion} under hidden contact-mode shift.
+\item \textbf{drawer pulling} under friction and stiction changes.
+\item \textbf{block pushing} under contact patch and mass-distribution shift.
+\item \textbf{cable routing} under latent snag and compliance changes.
+\end{itemize}
+Each episode samples aleatoric noise, contact shift, friction shift, actuator saturation, sensor dropout, latency, and a hidden-mechanism indicator. The splits are nominal noise, friction/contact shift, actuator saturation shift, sensor-dropout ambiguity, and combined missing mechanics.
+
+\section{Methods}
+We compare:
+\begin{itemize}
+\item \textbf{Mean world-model MPC:} acts using the mean transition prediction.
+\item \textbf{Ensemble variance gate:} gates actions from predictive variance.
+\item \textbf{MC-dropout uncertainty:} uses dropout variance as uncertainty.
+\item \textbf{Conformal risk gate:} abstains when conformal risk is high.
+\item \textbf{Active probe then plan:} probes uncertain episodes and repairs when a mechanism is identified.
+\item \textbf{Robust MPC fallback:} uses a conservative robust controller when uncertainty rises.
+\item \textbf{Uncertainty-bloat audit:} the proposed mechanism with mechanism detection, probing, repair, and false-abstention penalty.
+\item \textbf{Oracle mechanics repair:} hidden-state upper bound.
+\end{itemize}
+Metrics include task success, hidden-mechanism F1, false abstention, unsafe action, repair precision, calibration error, bloat index, intervention cost, and oracle regret.
+
+\section{Main Results}
+Table~\ref{tab:main} reports the combined missing-mechanics split. The proposed method is not competitive as a control method. It has slightly better hidden-mechanism F1 than active probing, but that F1 remains low in absolute terms. It loses badly on success to active probing and robust MPC, and it has worse unsafe-action rate than robust MPC.
+
+\begin{table}[h]
+\centering
+\caption{Combined missing-mechanics results over seven seeds. Confidence intervals are 95\% intervals over seed means. Lower false abstention, unsafe action, bloat, cost, and regret are better.}
+\label{tab:main}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & Success & F1 & Unsafe & Bloat & Regret \\
+\midrule
+Mean world-model MPC & $0.572 \pm 0.034$ & $0.000$ & $0.227$ & $0.252$ & $0.308$ \\
+Ensemble variance gate & $0.503 \pm 0.026$ & $0.147$ & $0.199$ & $0.512$ & $0.346$ \\
+MC dropout & $0.529 \pm 0.029$ & $\mathbf{0.149}$ & $0.207$ & $0.591$ & $0.341$ \\
+Conformal risk gate & $0.315 \pm 0.025$ & $0.009$ & $0.088$ & $0.730$ & $0.549$ \\
+Active probe then plan & $\mathbf{0.636 \pm 0.020}$ & $0.089$ & $0.199$ & $0.225$ & $\mathbf{0.230}$ \\
+Robust MPC fallback & $0.608 \pm 0.027$ & $0.000$ & $\mathbf{0.057}$ & $0.414$ & $0.262$ \\
+Uncertainty-bloat audit & $0.537 \pm 0.013$ & $0.146$ & $0.214$ & $0.410$ & $0.295$ \\
+Oracle repair & $0.752 \pm 0.040$ & $1.000$ & $0.094$ & $\mathbf{0.110}$ & $0.110$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.92\linewidth]{uncertainty_bloat_success.png}
+\caption{Task success across reliability shifts. The proposed method does not beat active probing or robust MPC on combined missing mechanics.}
+\label{fig:success}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\linewidth]{uncertainty_bloat_diagnosis.png}
+\caption{Combined split success, mechanism F1, and bloat. The audit reduces some bloat but does not turn diagnosis into better control.}
+\label{fig:diagnosis}
+\end{figure}
+
+\section{Ablations}
+The ablation table is especially damaging. Removing the mechanism classifier improves success to 0.582. Removing repair memory improves success to 0.577. A variance-only bloat score has higher F1 than the full method, although it does not repair. These results contradict the proposed mechanism: the full audit is not the best version of its own design.
+
+\begin{table}[h]
+\centering
+\caption{Uncertainty-bloat audit ablations on combined missing mechanics.}
+\label{tab:ablation}
+\begin{tabular}{lrrrr}
+\toprule
+Ablation & Success & F1 & Unsafe & Bloat \\
+\midrule
+Full uncertainty-bloat audit & $0.537 \pm 0.013$ & $0.146$ & $0.214$ & $0.410$ \\
+Minus mechanism classifier & $\mathbf{0.582 \pm 0.032}$ & $0.214$ & $0.237$ & $0.475$ \\
+Minus probe before repair & $0.547 \pm 0.025$ & $0.062$ & $0.224$ & $0.426$ \\
+Minus false-abstention penalty & $0.492 \pm 0.020$ & $0.111$ & $\mathbf{0.170}$ & $0.456$ \\
+Minus repair memory & $0.577 \pm 0.033$ & $0.100$ & $0.234$ & $0.415$ \\
+Variance-only bloat score & $0.514 \pm 0.030$ & $\mathbf{0.268}$ & $0.211$ & $0.480$ \\
+Abstain-only policy & $0.315 \pm 0.021$ & $0.000$ & $0.098$ & $0.686$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{uncertainty_bloat_ablation.png}
+\caption{Ablation success. Several ablations beat the full audit, so the mechanism is not validated.}
+\label{fig:ablation}
+\end{figure}
+
+\section{Stress Tests}
+Stress sweeps vary contact-mode shift, friction/stiction shift, actuator saturation, sensor dropout, latency, and combined hidden mechanics. At maximum combined stress, robust MPC reaches 0.513 task success, active probing reaches 0.507, and the bloat audit reaches 0.375. The proposed method has higher F1 than robust MPC but fails to convert diagnosis into robust control.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.88\linewidth]{uncertainty_bloat_stress_sweep.png}
+\caption{Combined stress sweep. The bloat audit degrades faster than active probing and robust MPC.}
+\label{fig:stress}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.86\linewidth]{uncertainty_bloat_safety_cost.png}
+\caption{Safety, false abstention, and intervention cost. Conformal gating is safe but over-abstains; robust MPC is safer than the bloat audit.}
+\label{fig:safety}
+\end{figure}
+
+\section{Why This Is Not Submission-Ready}
+The project fails the ICLR-main readiness gate for four reasons.
+\begin{itemize}
+\item \textbf{Closed-loop failure.} The proposed audit loses to active probing by $-0.09864 \pm 0.01937$ task success.
+\item \textbf{Safety failure.} Robust MPC has much lower unsafe-action rate: 0.057 versus 0.214.
+\item \textbf{Ablation contradiction.} Removing the mechanism classifier and removing repair memory both improve success.
+\item \textbf{Evidence ceiling.} The benchmark is deterministic and reproducible, but local. It is not robot hardware, not an accepted external deployment benchmark, and not a high-fidelity simulator result.
 \end{itemize}
 
-\section{Hostile Prior-Work Pressure}
-The closest local hostile records include:
-\begin{itemize}
-\item An Investigation into Uncertainty Quantification of Shallow Foundation Failure Mechanisms in Horizontally Stratified Layered Soil Strata (2026)
-\item VLS: Steering Pretrained Robot Policies via Vision-Language Models (2026)
-\item Uncertainty-Calibrated Safety Gating for Vision-Language- Action Manipulation Under Domain Shift: Reliability Gains and Intervention-Efficiency Trade-Offs (2026)
-\item Zero-Shot Uncertainty-Aware Deployment of Simulation Trained Policies on Real-World Robots (2021)
-\item Bayesian Controller Fusion: Leveraging Control Priors in Deep Reinforcement Learning for Robotics (2021)
-\end{itemize}
-These works make generic world models, uncertainty, model-based planning, and robot policy robustness crowded. Without real empirical evidence, the remaining novelty boundary is too weak for ICLR main.
+\section{Reproducibility}
+Run the benchmark from the repository root:
+\begin{verbatim}
+python src\run_experiment.py
+\end{verbatim}
+The script writes rollout CSVs, seed-level metrics, pairwise statistics, ablations, stress sweeps, negative cases, summary text, and the figures used in this manuscript. The canonical local PDF is \texttt{C:/Users/wangz/Downloads/88.pdf}.
 
-\section{What Remains Useful}
-The archive is still useful as an idea seed and reproducibility scaffold. The synthetic code, stress-test CSVs, reviewer attacks, and novelty-boundary docs can inform a future project. The correct next step is not more paper polishing; it is new evidence: implemented models, real baselines, manual related work, and robot or high-fidelity simulator validation.
-
-\section{Terminal Action}
-Decision: \textbf{KILL/ARCHIVE for ICLR main}. Do not submit this paper to ICLR main in the current form. Revival requires a substantially new empirical project.
+\section{Conclusion}
+World-model uncertainty bloat is a real and useful failure concept, but the proposed audit is not the right submission-ready mechanism. It diagnoses too weakly, repairs too little, and loses to simpler active probing or robust fallback baselines. The honest terminal action is \textbf{KILL/ARCHIVE}.
 
 \end{document}
