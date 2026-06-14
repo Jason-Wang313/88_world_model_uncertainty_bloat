@@ -1,16 +1,35 @@
-Submission-hardening experiment for paper 88 world_model_uncertainty_bloat
-Seven seeds, 600 episodes per seed, strong baselines, ablations, stress sweep, and negative cases.
-observed_only_behavior_clone hidden_mode_shift mean_success=0.3998 ci95=0.0191 tail=0.6002
-observed_only_behavior_clone combined_stress mean_success=0.3069 ci95=0.0161 tail=0.6931
-data_augmentation_wam hidden_mode_shift mean_success=0.4971 ci95=0.0131 tail=0.5029
-data_augmentation_wam combined_stress mean_success=0.4202 ci95=0.0172 tail=0.5798
-scalar_uncertainty_planner hidden_mode_shift mean_success=0.5419 ci95=0.0159 tail=0.4581
-scalar_uncertainty_planner combined_stress mean_success=0.5026 ci95=0.0163 tail=0.4974
-ensemble_disagreement_planner hidden_mode_shift mean_success=0.5893 ci95=0.0156 tail=0.4107
-ensemble_disagreement_planner combined_stress mean_success=0.5417 ci95=0.0208 tail=0.4583
-conformal_risk_filter hidden_mode_shift mean_success=0.6060 ci95=0.0173 tail=0.3940
-conformal_risk_filter combined_stress mean_success=0.5538 ci95=0.0146 tail=0.4462
-proposed_branch_mechanism hidden_mode_shift mean_success=0.7002 ci95=0.0146 tail=0.2998
-proposed_branch_mechanism combined_stress mean_success=0.6593 ci95=0.0145 tail=0.3407
-oracle_branch_upper_bound hidden_mode_shift mean_success=0.7705 ci95=0.0051 tail=0.2295
-oracle_branch_upper_bound combined_stress mean_success=0.7424 ci95=0.0220 tail=0.2576
+Paper 88 world_model_uncertainty_bloat v4 rebuild
+Terminal recommendation: KILL_ARCHIVE
+Reason: deterministic local world-model reliability benchmark added; no robot hardware or accepted external deployment benchmark is available.
+Main rollout rows: 47040
+Ablation rollout rows: 8232
+Stress rollout rows: 120960
+Seeds: [0, 1, 2, 3, 4, 5, 6]
+
+Combined missing mechanics:
+mean_world_model_mpc task_success=0.57228 ci95=0.03353 f1=0.00000 false_abstention=0.00000 unsafe=0.22704 repair_precision=0.00000 calibration=0.06758 bloat=0.25219 cost=0.00000 regret=0.30796
+ensemble_variance_gate task_success=0.50255 ci95=0.02569 f1=0.14713 false_abstention=0.00170 unsafe=0.19898 repair_precision=0.00000 calibration=0.21868 bloat=0.51178 cost=0.02428 regret=0.34613
+mc_dropout_uncertainty task_success=0.52891 ci95=0.02863 f1=0.14934 false_abstention=0.00170 unsafe=0.20663 repair_precision=0.00000 calibration=0.29511 bloat=0.59078 cost=0.02095 regret=0.34051
+conformal_risk_gate task_success=0.31463 ci95=0.02526 f1=0.00910 false_abstention=0.10544 unsafe=0.08844 repair_precision=0.00000 calibration=0.24112 bloat=0.73003 cost=0.14024 regret=0.54916
+active_probe_then_plan task_success=0.63605 ci95=0.01979 f1=0.08872 false_abstention=0.00000 unsafe=0.19898 repair_precision=1.00000 calibration=0.07806 bloat=0.22499 cost=0.04602 regret=0.23033
+robust_mpc_fallback task_success=0.60799 ci95=0.02711 f1=0.00000 false_abstention=0.00000 unsafe=0.05697 repair_precision=0.00000 calibration=0.20391 bloat=0.41419 cost=0.09243 regret=0.26199
+uncertainty_bloat_audit task_success=0.53741 ci95=0.01266 f1=0.14569 false_abstention=0.00000 unsafe=0.21429 repair_precision=1.00000 calibration=0.10258 bloat=0.40966 cost=0.00497 regret=0.29508
+oracle_mechanics_repair task_success=0.75170 ci95=0.03958 f1=1.00000 false_abstention=0.00000 unsafe=0.09439 repair_precision=1.00000 calibration=0.04768 bloat=0.11007 cost=0.07583 regret=0.10977
+paired task-success diff vs best success baseline active_probe_then_plan=-0.09864 ci95=0.01937
+
+Ablations:
+full_uncertainty_bloat_audit task_success=0.53741 ci95=0.01266 f1=0.14569 false_abstention=0.00000 unsafe=0.21429 repair_precision=1.00000 bloat=0.40966 regret=0.29508
+minus_mechanism_classifier task_success=0.58248 ci95=0.03225 f1=0.21361 false_abstention=0.00000 unsafe=0.23724 repair_precision=0.85714 bloat=0.47461 regret=0.28400
+minus_probe_before_repair task_success=0.54677 ci95=0.02500 f1=0.06236 false_abstention=0.00000 unsafe=0.22449 repair_precision=1.00000 bloat=0.42628 regret=0.30245
+minus_false_abstention_penalty task_success=0.49235 ci95=0.01967 f1=0.11080 false_abstention=0.00510 unsafe=0.17007 repair_precision=1.00000 bloat=0.45641 regret=0.36521
+minus_repair_memory task_success=0.57738 ci95=0.03300 f1=0.09973 false_abstention=0.00000 unsafe=0.23384 repair_precision=0.28571 bloat=0.41498 regret=0.30349
+variance_only_bloat_score task_success=0.51361 ci95=0.02977 f1=0.26842 false_abstention=0.00085 unsafe=0.21089 repair_precision=0.00000 bloat=0.47959 regret=0.32723
+abstain_only_policy task_success=0.31463 ci95=0.02091 f1=0.00000 false_abstention=0.08674 unsafe=0.09779 repair_precision=0.00000 bloat=0.68616 regret=0.54118
+
+Combined stress level 1.0:
+ensemble_variance_gate task_success=0.12321 ci95=0.03564 f1=0.93855 false_abstention=0.09821 unsafe=0.05179 bloat=0.58479 cost=0.20150
+conformal_risk_gate task_success=0.01786 ci95=0.01178 f1=0.87551 false_abstention=0.35357 unsafe=0.00357 bloat=0.74939 cost=0.27550
+active_probe_then_plan task_success=0.50714 ci95=0.02382 f1=0.16429 false_abstention=0.00000 unsafe=0.34286 bloat=0.25767 cost=0.06436
+robust_mpc_fallback task_success=0.51250 ci95=0.03423 f1=0.00000 false_abstention=0.00000 unsafe=0.15536 bloat=0.51470 cost=0.10000
+uncertainty_bloat_audit task_success=0.37500 ci95=0.02450 f1=0.24232 false_abstention=0.00000 unsafe=0.27500 bloat=0.50764 cost=0.04704
+oracle_mechanics_repair task_success=0.67143 ci95=0.04652 f1=1.00000 false_abstention=0.00000 unsafe=0.16071 bloat=0.09879 cost=0.08825
