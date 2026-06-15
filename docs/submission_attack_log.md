@@ -192,3 +192,31 @@ Attack: No meaningful recoverable ICLR-main issue remains after archiving.
 Verdict: Terminal condition reached.
 
 Action: Mark KILL_ARCHIVE and stop.
+
+## v4 Rerun Gate Round 28
+Attack: The local benchmark might show that uncertainty-bloat auditing wins closed-loop task success after rerun.
+
+Verdict: Failed. The rerun shows `0.53741 +/- 0.01266` task success for the proposed method versus `0.63605 +/- 0.01979` for `active_probe_then_plan`; paired difference is `-0.09864 +/- 0.01937`.
+
+Action: Keep KILL_ARCHIVE.
+
+## v4 Rerun Gate Round 29
+Attack: The audit might justify itself through safety even if it loses success.
+
+Verdict: Failed. `robust_mpc_fallback` has unsafe-action rate `0.05697`, while `uncertainty_bloat_audit` has `0.21429`.
+
+Action: Do not claim safety dominance.
+
+## v4 Rerun Gate Round 30
+Attack: The mechanism might be validated by ablations.
+
+Verdict: Failed. `minus_mechanism_classifier` improves success to `0.58248`, and `minus_repair_memory` improves success to `0.57738`, both above the full method's `0.53741`.
+
+Action: Preserve archive decision.
+
+## v4 Rerun Gate Round 31
+Attack: Stress robustness might support a main-paper claim.
+
+Verdict: Failed. At maximum combined stress, `robust_mpc_fallback` reaches `0.51250` task success, `active_probe_then_plan` reaches `0.50714`, and the proposed audit reaches only `0.37500`.
+
+Action: Keep the paper as a reproducible negative evidence audit.
