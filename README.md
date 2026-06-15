@@ -10,6 +10,8 @@ This repository contains a reproducible local evidence audit for the research be
 
 The v4 rebuild replaces the template scaffold with a deterministic world-model reliability benchmark over four manipulation tasks, five hidden-mechanics splits, eight methods, ablations, stress sweeps, and negative cases.
 
+Latest audited rerun: 2026-06-15. The source experiment compiled and regenerated the CSVs, figures, and summary from `src/run_experiment.py`.
+
 ## Why This Is Archived
 
 - On the combined missing-mechanics split, `uncertainty_bloat_audit` reaches `0.53741 +/- 0.01266` task success.
@@ -18,6 +20,16 @@ The v4 rebuild replaces the template scaffold with a deterministic world-model r
 - `robust_mpc_fallback` has much lower unsafe-action rate (`0.05697`) than the proposed audit (`0.21429`).
 - Several ablations beat the full method on success, including `minus_mechanism_classifier` (`0.58248`) and `minus_repair_memory` (`0.57738`).
 - The evidence is local and synthetic, not hardware or accepted high-fidelity benchmark validation.
+
+## Evidence Coverage
+
+- Main rollouts: 47,040 rows.
+- Ablation rollouts: 8,232 rows.
+- Stress rollouts: 120,960 rows.
+- Seeds: 0 through 6.
+- Splits: `nominal_noise`, `friction_contact_shift`, `actuator_saturation_shift`, `sensor_dropout_ambiguity`, `combined_missing_mechanics`.
+- Tasks: `peg_insertion_contact_mode`, `drawer_pull_stiction`, `block_push_patch_shift`, `cable_routing_latent_snag`.
+- Terminal gate: `KILL_ARCHIVE`, because the evidence supports a reproducible negative audit, not an ICLR-main submission.
 
 ## Reproduce
 
