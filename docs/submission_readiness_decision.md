@@ -4,14 +4,16 @@ Decision: KILL_ARCHIVE
 
 ICLR main-conference readiness: NO.
 
-Submission-hardening version: v4.
+Submission-hardening version: v5 expanded.
 
-Latest rerun: 2026-06-15 from `src/run_experiment.py`.
+Latest rerun: 2026-06-21/2026-06-22 from `src/run_experiment.py`, with manuscript generation and validated 25-page PDF artifact.
 
-Reason: The v4 rebuild is materially stronger than the earlier template paper, but it fails the ICLR-main bar on the paper's own gates. It contains a deterministic local world-model reliability benchmark with seven seeds, 47,040 main rollouts, 8,232 ablation rollouts, 120,960 stress rollouts, strong synthetic baselines, ablations, stress sweeps, negative cases, and figures. On the combined missing-mechanics split, `uncertainty_bloat_audit` reaches `0.53741 +/- 0.01266` task success, while `active_probe_then_plan` reaches `0.63605 +/- 0.01979`. The paired task-success difference is `-0.09864 +/- 0.01937`.
+Reason: The v5 rebuild is materially stronger than the v4 archive. It uses a frozen hostile protocol with ten seeds, six tasks, eight splits, thirteen main methods, ten ablations, six stress axes, four fixed-risk budgets, 24 negative cases, 199,680 main rollouts, 33,600 ablation rollouts, 302,400 stress rows, 69,120 fixed-risk rows, bright boxed citation links, and visual PDF QA. However, it fails the paper's own ICLR-main gates.
 
-Additional blockers: `robust_mpc_fallback` is far safer (`0.05697` unsafe-action rate versus `0.21429` for the proposed audit), maximum combined stress favors `robust_mpc_fallback` and `active_probe_then_plan`, and ablations that remove core components improve success (`minus_mechanism_classifier` at `0.58248`, `minus_repair_memory` at `0.57738`). The evidence remains local synthetic simulation rather than robot hardware or an accepted high-fidelity deployment benchmark.
+Primary blocker: `mechanics_gap_auditor_v5` reaches hard-aggregate success `0.60642`, while `robust_mpc_fallback` reaches `0.66701`; paired success lower95 is `-0.07734`. The method improves hidden-mechanism F1, but the improvement is not enough because unsafe action is `0.13768` versus `0.04861` for the safest reference, and robust utility is `0.23714` versus best utility `0.39872`.
+
+Additional blockers: the mechanism ablation gate fails, fixed-risk deployment at budget `0.05` has zero accepted coverage on hard splits, and the scope gate fails because there is no real robot hardware or accepted high-fidelity benchmark validation.
 
 Honest terminal action: archive/kill for ICLR main. Do not submit this paper to ICLR main in its current form.
 
-Revival condition: rebuild as a real empirical robotics paper with hardware or accepted benchmark validation, implemented learned world-model diagnostics, real competing baselines, manually synthesized related work, and deployment evidence that diagnosis improves task success and safety.
+Revival condition: rebuild as a real empirical robotics paper with hardware or accepted benchmark validation, implemented learned world-model diagnostics, released model/checkpoint artifacts, real competing baselines, manually synthesized related work, and deployment evidence that diagnosis improves both task success and safety.
