@@ -1,5 +1,25 @@
-case,expected_behavior,observed_outcome,lesson
-genuinely_aleatoric_surface_noise,do not invent a missing mechanism,bloat audit sometimes probes and repairs noise-heavy episodes,noise-mechanism separation needs stronger evidence than variance shape
-new_contact_mode_not_in_classifier,flag unknown mechanism rather than known repair,classifier maps novel snag to contact/friction family,open-set mechanism discovery remains unsolved
-safety_critical_high_uncertainty,abstain until human inspection,false-abstention penalty can encourage action under rare hazards,"deployment needs calibrated safety constraints, not just bloat reduction"
-sensor_dropout_masks_good_model,recover observation before repairing dynamics,world-model repair wastes probes when perception is the bottleneck,perception-health and dynamics-health must be separated
+case_id,case_family,expected_behavior,observed_failure_mode,terminal_lesson
+aleatoric_noise_as_mechanics_0,aleatoric_noise_as_mechanics,variance should not become a false missing-mechanics diagnosis,variant 0: noise inflated as hidden contact gap,separate aleatoric noise from repairable structure
+aleatoric_noise_as_mechanics_1,aleatoric_noise_as_mechanics,variance should not become a false missing-mechanics diagnosis,variant 1: noise inflated as hidden contact gap,separate aleatoric noise from repairable structure
+aleatoric_noise_as_mechanics_2,aleatoric_noise_as_mechanics,variance should not become a false missing-mechanics diagnosis,variant 2: noise inflated as hidden contact gap,separate aleatoric noise from repairable structure
+aleatoric_noise_as_mechanics_3,aleatoric_noise_as_mechanics,variance should not become a false missing-mechanics diagnosis,variant 3: noise inflated as hidden contact gap,separate aleatoric noise from repairable structure
+hidden_contact_mode_bloat_0,hidden_contact_mode_bloat,high variance should trigger mode identification,variant 0: uncertainty gate abstains without repair,probe for contact mode rather than only abstaining
+hidden_contact_mode_bloat_1,hidden_contact_mode_bloat,high variance should trigger mode identification,variant 1: uncertainty gate abstains without repair,probe for contact mode rather than only abstaining
+hidden_contact_mode_bloat_2,hidden_contact_mode_bloat,high variance should trigger mode identification,variant 2: uncertainty gate abstains without repair,probe for contact mode rather than only abstaining
+hidden_contact_mode_bloat_3,hidden_contact_mode_bloat,high variance should trigger mode identification,variant 3: uncertainty gate abstains without repair,probe for contact mode rather than only abstaining
+robust_fallback_overrepair_0,robust_fallback_overrepair,robust fallback may safely solve the case,variant 0: audit repairs a mechanism that robust MPC absorbs,repair must beat conservative control
+robust_fallback_overrepair_1,robust_fallback_overrepair,robust fallback may safely solve the case,variant 1: audit repairs a mechanism that robust MPC absorbs,repair must beat conservative control
+robust_fallback_overrepair_2,robust_fallback_overrepair,robust fallback may safely solve the case,variant 2: audit repairs a mechanism that robust MPC absorbs,repair must beat conservative control
+robust_fallback_overrepair_3,robust_fallback_overrepair,robust fallback may safely solve the case,variant 3: audit repairs a mechanism that robust MPC absorbs,repair must beat conservative control
+conformal_zero_coverage_0,conformal_zero_coverage,safety without useful coverage is not deployable,variant 0: conformal gate rejects every hard episode,report coverage with accepted safety
+conformal_zero_coverage_1,conformal_zero_coverage,safety without useful coverage is not deployable,variant 1: conformal gate rejects every hard episode,report coverage with accepted safety
+conformal_zero_coverage_2,conformal_zero_coverage,safety without useful coverage is not deployable,variant 2: conformal gate rejects every hard episode,report coverage with accepted safety
+conformal_zero_coverage_3,conformal_zero_coverage,safety without useful coverage is not deployable,variant 3: conformal gate rejects every hard episode,report coverage with accepted safety
+stale_repair_memory_0,stale_repair_memory,repair memory should not transfer stale mechanisms,variant 0: old fixture repair corrupts new task,mechanism memory needs expiry
+stale_repair_memory_1,stale_repair_memory,repair memory should not transfer stale mechanisms,variant 1: old fixture repair corrupts new task,mechanism memory needs expiry
+stale_repair_memory_2,stale_repair_memory,repair memory should not transfer stale mechanisms,variant 2: old fixture repair corrupts new task,mechanism memory needs expiry
+stale_repair_memory_3,stale_repair_memory,repair memory should not transfer stale mechanisms,variant 3: old fixture repair corrupts new task,mechanism memory needs expiry
+dropout_false_gap_0,dropout_false_gap,sensor dropout should not imply physical gap,variant 0: missing pixels become missing mechanics,diagnosis needs observation-quality state
+dropout_false_gap_1,dropout_false_gap,sensor dropout should not imply physical gap,variant 1: missing pixels become missing mechanics,diagnosis needs observation-quality state
+dropout_false_gap_2,dropout_false_gap,sensor dropout should not imply physical gap,variant 2: missing pixels become missing mechanics,diagnosis needs observation-quality state
+dropout_false_gap_3,dropout_false_gap,sensor dropout should not imply physical gap,variant 3: missing pixels become missing mechanics,diagnosis needs observation-quality state

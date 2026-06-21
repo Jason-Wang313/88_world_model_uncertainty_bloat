@@ -30,3 +30,12 @@
 - Confirmed `robust_mpc_fallback` has much lower unsafe-action rate than the proposed audit.
 - Confirmed `minus_mechanism_classifier` and `minus_repair_memory` improve success over the full method.
 - Updated child docs and paper source to keep the v4 KILL_ARCHIVE decision evidence-bound.
+
+## v5 - Expanded Submission-Readiness Audit
+- Froze a paper-specific hostile-review plan before execution.
+- Rebuilt the evidence suite with ten seeds, six tasks, eight splits, thirteen main methods, ten ablations, six stress axes, four fixed-risk budgets, and 24 negative cases.
+- Generated 199,680 main rollout rows, 15,360 dataset summary rows, 1,040 main seed-metric rows, 1,248 aggregate metric rows, 672 paired rows, 130 hard-aggregate seed rows, 156 hard-aggregate metric rows, 84 hard-aggregate paired rows, 33,600 ablation rows, 302,400 stress rows, and 69,120 fixed-risk rows.
+- Generated a 25-page ICLR-style negative archive manuscript with bright boxed clickable citation links.
+- Validated the canonical Downloads-only PDF at `C:/Users/wangz/Downloads/88.pdf` with SHA256 `755790FF694B3B6ACE536AE7994CFA1DFB049F43F7A3D5912F6D185127C984EB`.
+- Visual PDF QA passed after cleaning the negative-case table and appendix Pareto labels.
+- Terminal decision: KILL_ARCHIVE.

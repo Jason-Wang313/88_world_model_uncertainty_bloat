@@ -1,6 +1,6 @@
 # 88 World-Model Uncertainty Bloat
 
-Submission-hardening version: v4
+Submission-hardening version: v5 expanded
 
 Terminal decision: **KILL_ARCHIVE** for ICLR main conference.
 
@@ -8,56 +8,60 @@ This repository contains a reproducible local evidence audit for the research be
 
 > Expose cases where uncertainty mechanisms hide missing mechanics instead of repairing them.
 
-The v4 rebuild replaces the template scaffold with a deterministic world-model reliability benchmark over four manipulation tasks, five hidden-mechanics splits, eight methods, ablations, stress sweeps, and negative cases.
+The v5 rebuild replaces the earlier short v4 archive with a 25-page ICLR-style negative submission-readiness manuscript, a frozen CPU-only mechanics-gap audit, strong uncertainty/control/probing baselines, ablations, stress sweeps, fixed-risk deployment checks, negative cases, visual PDF QA, and bright boxed clickable citation links.
 
-Latest audited rerun: 2026-06-15. The source experiment compiled and regenerated the CSVs, figures, and summary from `src/run_experiment.py`.
+Latest audited rerun: 2026-06-21/2026-06-22. The source experiment compiled, regenerated deterministic CSV evidence, regenerated figures from frozen CSVs, rebuilt the manuscript, and validated the final PDF at `C:/Users/wangz/Downloads/88.pdf`.
+
+Final Downloads PDF SHA256: `755790FF694B3B6ACE536AE7994CFA1DFB049F43F7A3D5912F6D185127C984EB`.
 
 ## Why This Is Archived
 
-- On the combined missing-mechanics split, `uncertainty_bloat_audit` reaches `0.53741 +/- 0.01266` task success.
-- The strongest success baseline, `active_probe_then_plan`, reaches `0.63605 +/- 0.01979`.
-- The paired task-success difference is `-0.09864 +/- 0.01937`.
-- `robust_mpc_fallback` has much lower unsafe-action rate (`0.05697`) than the proposed audit (`0.21429`).
-- Several ablations beat the full method on success, including `minus_mechanism_classifier` (`0.58248`) and `minus_repair_memory` (`0.57738`).
-- The evidence is local and synthetic, not hardware or accepted high-fidelity benchmark validation.
+- On the hard aggregate, `mechanics_gap_auditor_v5` reaches `0.60642` task success.
+- The strongest success reference, `robust_mpc_fallback`, reaches `0.66701`.
+- The paired success lower95 for v5 versus the best success reference is `-0.07734`.
+- v5 improves hidden-mechanism F1, but does not convert that diagnostic gain into a submission-grade robotics result.
+- The safest reference, `robust_mpc_fallback`, has unsafe-action rate `0.04861`; v5 has `0.13768`.
+- The best robust utility is `0.39872`; v5 utility is `0.23714`.
+- The mechanism gate fails because ablations do not establish necessity.
+- The fixed-risk deployment gate fails because strict budget `0.05` coverage collapses to zero on the hard fixed-risk splits.
+- The scope gate fails because there is no real robot or accepted high-fidelity external benchmark evidence.
 
 ## Evidence Coverage
 
-- Main rollouts: 47,040 rows.
-- Ablation rollouts: 8,232 rows.
-- Stress rollouts: 120,960 rows.
-- Seeds: 0 through 6.
-- Splits: `nominal_noise`, `friction_contact_shift`, `actuator_saturation_shift`, `sensor_dropout_ambiguity`, `combined_missing_mechanics`.
-- Tasks: `peg_insertion_contact_mode`, `drawer_pull_stiction`, `block_push_patch_shift`, `cable_routing_latent_snag`.
-- Terminal gate: `KILL_ARCHIVE`, because the evidence supports a reproducible negative audit, not an ICLR-main submission.
+- Main rollouts: 199,680 rows.
+- Dataset summary rows: 15,360.
+- Main seed-metric rows: 1,040.
+- Main aggregate metric rows: 1,248.
+- Main paired rows: 672.
+- Hard-aggregate seed rows: 130.
+- Hard-aggregate metric rows: 156.
+- Hard-aggregate paired rows: 84.
+- Ablation rollouts: 33,600 rows.
+- Stress rollouts: 302,400 rows.
+- Fixed-risk rollouts: 69,120 rows.
+- Negative cases: 24.
+- Seeds: 0 through 9.
+- Tasks: six manipulation/contact tasks.
+- Splits: eight uncertainty, shift, and missing-mechanics regimes.
+- Methods: thirteen main methods, including mean world-model MPC, ensemble/dropout/conformal UQ, active probing, robust MPC, residual repair, Bayesian expansion, v4, v5, and oracle references.
 
 ## Reproduce
 
 ```powershell
+python -m py_compile src\run_experiment.py scripts\generate_manuscript.py scripts\validate_submission_artifacts.py
 python src\run_experiment.py
-```
-
-The runner writes:
-
-- `results/rollouts.csv`
-- `results/raw_seed_metrics.csv`
-- `results/metrics.csv`
-- `results/pairwise_stats.csv`
-- `results/ablation_rollouts.csv`
-- `results/ablation_seed_metrics.csv`
-- `results/ablation_metrics.csv`
-- `results/stress_sweep_raw.csv`
-- `results/stress_sweep.csv`
-- `results/negative_cases.csv`
-- `results/summary.txt`
-- `figures/uncertainty_bloat_*.png`
-
-## Rebuild PDF
-
-```powershell
+python scripts\generate_manuscript.py
 cd paper
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
-pdflatex -interaction=nonstopmode -halt-on-error main.tex
+pdflatex -interaction=nonstopmode main.tex
+bibtex main
+pdflatex -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
+pdflatex -interaction=nonstopmode main.tex
+cd ..
+python scripts\validate_submission_artifacts.py
 ```
 
-Canonical local PDF: `C:/Users/wangz/Downloads/88.pdf`
+The final numbered PDF belongs in Downloads only:
+
+- Canonical local PDF: `C:/Users/wangz/Downloads/88.pdf`
+- Visible Desktop PDF target: none.
